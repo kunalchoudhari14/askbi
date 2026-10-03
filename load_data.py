@@ -1,5 +1,6 @@
-from pathlib import Path
 import sqlite3
+from pathlib import Path
+
 import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parent  # the folder load_data.py lives in

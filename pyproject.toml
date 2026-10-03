@@ -1,0 +1,2 @@
+[tool.ruff.lint]
+unfixable = ["F401"]   # still warn about unused imports, but never auto-delete them
