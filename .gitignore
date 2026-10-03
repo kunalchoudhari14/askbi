@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# AskBI data (rebuilt by load_data.py)
+data/raw/
+data/*.db
