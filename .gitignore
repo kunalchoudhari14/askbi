@@ -222,3 +222,4 @@ __marimo__/
 # AskBI data (rebuilt by load_data.py)
 data/raw/
 data/*.db
+.vscode/
