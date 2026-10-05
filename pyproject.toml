@@ -1,0 +1,6 @@
+# Project-wide tool settings (committed, so everyone gets the same rules).
+
+[tool.ruff.lint]
+# Ruff still WARNS about unused imports (rule F401) but never auto-deletes
+# them on save, so an import you're about to use doesn't vanish.
+unfixable = ["F401"]
