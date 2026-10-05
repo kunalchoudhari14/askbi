@@ -52,11 +52,13 @@ pages = [dashboard, ask]
 if st.session_state["role"] == "developer":
     pages.append(developer)  # () calls the method; add the page object itself
 
-# TODO (step 6b): sidebar info + log out.
-#   - st.sidebar.caption(f"Logged in as: {st.session_state['role']}")
-#   - if st.sidebar.button("Log out"): st.session_state.clear(), then st.rerun()
+# Sidebar: show who's logged in, plus a Log out button.
+st.sidebar.caption(f"Logged in as: {st.session_state['role']}")
 
-# st.navigation builds the sidebar menu from the list; .run() shows the
-# page the user picked (the first page is the default).
+if st.sidebar.button("Log out"):
+    st.session_state.clear()  # forget the role (and anything else stored)
+    st.rerun()  # re-run → "role" is missing → the login gate shows again
+
+
 nav = st.navigation(pages)
 nav.run()
