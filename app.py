@@ -46,11 +46,11 @@ dashboard = st.Page("pages/dashboard.py", title="Dashboard", icon="📊")
 ask = st.Page("pages/ask.py", title="Ask Me Anything", icon="💬")
 developer = st.Page("pages/developer.py", title="Developer", icon="🛠️")
 
-# TODO (step 6b): show the Developer page only to developers.
-#   1. Start with the pages everyone gets:   pages = [dashboard, ask]
-#   2. If st.session_state["role"] == "developer": add `developer` to the list
-#      (hint: which list method adds one item to the end?)
-pages = [dashboard, ask, developer]
+# Role-based pages: everyone gets Dashboard + Ask; only developers also
+# get the Developer page (end users never see it in the sidebar).
+pages = [dashboard, ask]
+if st.session_state["role"] == "developer":
+    pages.append(developer)  # () calls the method; add the page object itself
 
 # TODO (step 6b): sidebar info + log out.
 #   - st.sidebar.caption(f"Logged in as: {st.session_state['role']}")
