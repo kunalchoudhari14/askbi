@@ -7,4 +7,4 @@ v2: RAG over the data dictionary and KPI definitions.
 import streamlit as st
 
 st.title("Ask Me Anything")
-st.info("Test-to-SQL coming in v1")  # TODO: typo → "Text-to-SQL"
+st.info("Text-to-SQL coming in v1")

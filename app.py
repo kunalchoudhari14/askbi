@@ -59,6 +59,6 @@ if st.sidebar.button("Log out"):
     st.session_state.clear()  # forget the role (and anything else stored)
     st.rerun()  # re-run → "role" is missing → the login gate shows again
 
-
+# Build the sidebar menu and show the selected page.
 nav = st.navigation(pages)
 nav.run()
