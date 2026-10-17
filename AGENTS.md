@@ -47,6 +47,8 @@ Kunal is the architect: he decides, approves every edit and merges. You build.
 - Work only on a feature branch, never on `main`.
 - Commit messages: `[claude-code] <what changed>` (later per subagent, e.g. `[test-writer]`).
 - Mark each finished task in the Spec Kit tasks file.
+- Small chores (tests for existing code, config, docs) don't need Spec Kit; features and behaviour changes do.
+- Never commit unless Kunal asks; when he does, use the commit message format above.
 
 ## Never do (ask Kunal first, or don't)
 - Push, merge or force-push anything; never touch `main` directly.
