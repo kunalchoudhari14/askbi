@@ -1,5 +1,6 @@
 # Dev tools: everything in requirements.txt, plus tools to check the code.
 # Used on Kunal's Mac and in CI; not needed to run the deployed app.
 -r requirements.txt
+pre-commit==4.7.0
 pytest==9.1.1
 ruff==0.17.1
