@@ -223,3 +223,5 @@ __marimo__/
 data/raw/
 data/*.db
 .vscode/
+# Claude Code personal settings (never commit)
+.claude/settings.local.json

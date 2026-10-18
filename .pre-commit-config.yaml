@@ -1,0 +1,20 @@
+# Checks that run on every `git commit` (set up once with `pre-commit install`).
+repos:
+  # Ruff: same version as requirements-dev.txt, so pre-commit, the Mac and CI agree.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.1
+    hooks:
+      - id: ruff-check   # lint (rules from pyproject.toml)
+      - id: ruff-format  # format
+
+  # Standard safety hooks.
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files  # block big files such as a database (default limit 500 KB)
+      - id: detect-private-key       # block private keys
+      - id: check-yaml               # YAML must parse
+      - id: end-of-file-fixer        # add a missing final newline
+        exclude: ^(\.specify|specs)/  # Spec Kit files: AGENTS.md says don't rewrite them
+      - id: trailing-whitespace      # remove spaces at line ends
+        exclude: ^(\.specify|specs)/

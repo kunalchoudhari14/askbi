@@ -4,3 +4,11 @@
 # Ruff still WARNS about unused imports (rule F401) but never auto-deletes
 # them on save, so an import you're about to use doesn't vanish.
 unfixable = ["F401"]
+
+[tool.pytest.ini_options]
+# Put the repo root on sys.path so tests can `from core import ...` when
+# `pytest` runs from the root (tests/ has no __init__.py, so pytest would
+# otherwise only add tests/ itself).
+pythonpath = ["."]
+# Only look in tests/, never in .venv/ or data/.
+testpaths = ["tests"]

@@ -1,4 +1,6 @@
-pandas
-streamlit
-plotly
-python-dotenv
+# App dependencies, pinned to the versions AskBI is tested with.
+# Upgrade on purpose (one at a time, then re-test), never by accident.
+pandas==3.0.6
+plotly==7.1.0
+python-dotenv==1.2.4
+streamlit==1.65.0
