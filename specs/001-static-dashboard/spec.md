@@ -8,6 +8,13 @@
 
 **Input**: User description: "v0-c: the default Dashboard page for AskBI. Both roles see the same dashboard after logging in: 4 KPI cards (Revenue, Orders, AOV, Late-delivery %) and 2 charts (monthly revenue trend, Top 10 product categories by revenue), with visible KPI definitions. Monthly revenue summed over the full range must equal the Revenue card. Out of scope: filters, date pickers, orders-by-status chart, AI features, row-level security."
 
+## Clarifications
+
+### Session 2026-10-18
+
+- Q: How should delivered orders with no delivery date be made visible on the Late-delivery % card? → A: Show a small visible line under the card stating how many delivered orders have no delivery date (lateness unknown) and are therefore excluded.
+- Q: How should category names look on the Top 10 chart, given the English names are stored like `health_beauty`? → A: Title Case every word for display: underscores become spaces and each word is capitalised ("Health Beauty", "Bed Bath Table"); the same rule applies to untranslated fallback names. Stored names are unchanged.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - See the headline KPIs at a glance (Priority: P1)
@@ -26,6 +33,7 @@ A logged-in user (end user or developer) opens the Dashboard and immediately see
 4. **Given** the dataset, **When** the AOV card is shown, **Then** it equals Revenue divided by the number of valid orders, in R$.
 5. **Given** the dataset, **When** the Late-delivery % card is shown, **Then** it equals delivered orders that reached the customer on a later calendar day than the estimated delivery date, divided by all delivered orders with a known delivery date, shown as a percentage.
 6. **Given** a delivered order that reached the customer on the same calendar day as its estimate, **When** Late-delivery % is calculated, **Then** that order counts as on time.
+7. **Given** some delivered orders have no delivery date, **When** the Late-delivery % card is shown, **Then** a smaller line underneath states how many delivered orders were excluded because their lateness is unknown (8 in the current data).
 
 ---
 
@@ -58,7 +66,7 @@ The user sees a chart of the 10 product categories with the highest revenue, lab
 
 1. **Given** the dataset, **When** the category chart is shown, **Then** it shows exactly 10 categories, ordered from highest to lowest revenue.
 2. **Given** the category chart, **When** the user reads its title, **Then** the title contains "Top 10".
-3. **Given** a category with an English translation, **When** it appears in the chart, **Then** it is labelled with the English name.
+3. **Given** a category with an English translation, **When** it appears in the chart, **Then** it is labelled with the English name in Title Case with spaces (e.g. stored `health_beauty` shows as "Health Beauty").
 4. **Given** the category chart, **When** a bar's value is read, **Then** it equals the sum of item prices in that category across valid orders, in R$.
 
 ---
@@ -80,9 +88,9 @@ The user can see, on the Dashboard itself, how each KPI and chart is defined (wh
 
 ### Edge Cases
 
-- **Delivered orders with no delivery date** (8 in the current data): they cannot be judged late or on time, so they are left out of both the top and bottom of Late-delivery %. The definition on the page says so.
-- **Products with no category** (about 610 products): their revenue is grouped under one label, "Unknown category", which competes for the top 10 like any other category. Their revenue is never dropped, so it still counts in Revenue and the monthly trend.
-- **Categories with no English translation** (2 in the current data): shown with their original category name, so they are never hidden or blank.
+- **Delivered orders with no delivery date** (8 in the current data): they cannot be judged late or on time, so they are left out of both the top and bottom of Late-delivery %. A small line under the card shows how many were excluded, and the definition on the page says so. If the count is zero, the line still shows "0 excluded" so the rule stays visible.
+- **Products with no category** (about 610 products): their revenue is grouped under one label, "Unknown Category", which competes for the top 10 like any other category (it ranks 21st today, so it does not appear yet). Their revenue is never dropped, so it still counts in Revenue and the monthly trend.
+- **Categories with no English translation** (2 in the current data): shown with their original category name, formatted the same way (Title Case, spaces instead of underscores, e.g. "Pc Gamer"), so they are never hidden or blank.
 - **Months with no orders inside the range** (e.g. Nov 2016): shown as zero, so the trend's timeline has no gaps.
 - **Very sparse edge months** (e.g. Sep 2016, Dec 2016, Sep 2018 have only 1–2 valid orders): still shown, because dropping them would break the rule that monthly revenue adds up to the Revenue card.
 - **Valid orders with no items**: they add nothing to revenue but still count as valid orders in the AOV denominator, following the definition as written.
@@ -101,11 +109,11 @@ The user can see, on the Dashboard itself, how each KPI and chart is defined (wh
 - **FR-003**: The system MUST show a **Revenue** card equal to Revenue as defined in FR-002.
 - **FR-004**: The system MUST show an **Orders** card whose main number is the count of all orders (every status), with a secondary line showing the count of canceled plus unavailable orders.
 - **FR-005**: The system MUST show an **Average order value** card equal to Revenue divided by the number of valid orders.
-- **FR-006**: The system MUST show a **Late-delivery %** card equal to (delivered orders whose customer delivery date is a later calendar day than the estimated delivery date) ÷ (delivered orders with a known customer delivery date). Same-day delivery counts as on time. Delivered orders with no delivery date are excluded from both parts.
+- **FR-006**: The system MUST show a **Late-delivery %** card equal to (delivered orders whose customer delivery date is a later calendar day than the estimated delivery date) ÷ (delivered orders with a known customer delivery date). Same-day delivery counts as on time. Delivered orders with no delivery date are excluded from both parts, and the card MUST show a secondary line with the count of these excluded orders (lateness unknown).
 - **FR-007**: The system MUST show a **monthly revenue trend** chart with one value per calendar month from the earliest to the latest order month in the data, including zero-revenue months inside that range. Orders are assigned to a month by their purchase date.
 - **FR-008**: The sum of all monthly revenue values MUST equal the Revenue card exactly.
 - **FR-009**: The system MUST show a **Top 10 product categories by revenue** chart, ranked highest first, with the words "Top 10" in its title. Category revenue uses the same Revenue definition (item prices of valid orders).
-- **FR-010**: Category labels MUST use English category names; categories without a translation use their original name, and products with no category are grouped as "Unknown category".
+- **FR-010**: Category labels MUST use English category names; categories without a translation use their original name, and products with no category are grouped as "Unknown Category". For display, every label MUST be shown in Title Case with underscores replaced by spaces (e.g. `bed_bath_table` → "Bed Bath Table"); the stored names are not changed.
 - **FR-011**: Money values MUST be shown in BRL with the "R$" symbol; large values may be abbreviated on cards (e.g. "R$ 13.2M") as long as the full value is available on the page. Late-delivery % MUST be shown as a percentage with one decimal place.
 - **FR-012**: The Dashboard MUST make the definition of each KPI and each chart visible on the page or reachable in at most one click, and those definitions MUST match FR-002 to FR-010.
 - **FR-013**: If the data cannot be loaded, the Dashboard MUST show a clear, friendly error message instead of crashing or showing misleading numbers.
