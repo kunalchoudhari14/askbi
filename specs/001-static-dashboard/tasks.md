@@ -46,14 +46,14 @@ description: "Task list for the Default Dashboard (v0-c)"
 
 **Purpose**: The single front door for data (FR-015). **Every later phase depends on this.**
 
-- [ ] T002 Write `tests/test_db.py` (red) for [contracts/core-api.md](contracts/core-api.md) § `core/db.py`:
+- [X] T002 Write `tests/test_db.py` (red) for [contracts/core-api.md](contracts/core-api.md) § `core/db.py`:
   - `run_query("SELECT COUNT(*) AS n FROM orders", db_path=fixture_db_path)` returns a `pd.DataFrame` with `n == 8`.
   - A `?` parameter works: counting orders with `order_status = ?` and `("canceled",)` gives 1.
   - A write fails: `get_connection(fixture_db_path)` followed by an `INSERT INTO orders ...` raises `sqlite3.OperationalError`. Close the connection in `finally`.
   - Missing file: `run_query(..., db_path=missing_db_path)` raises `DataUnavailableError`, **and `missing_db_path.exists()` is still `False` afterwards**.
   - Bad SQL keeps its cause: `run_query("SELECT no_such_column FROM orders", db_path=fixture_db_path)` raises `DataUnavailableError` whose `__cause__` is an instance of `sqlite3.Error` (Kunal's decision, research R2).
   - `DB_PATH` ends with `data/olist.db`.
-- [ ] T003 Implement `core/db.py` so that T002 passes:
+- [X] T003 Implement `core/db.py` so that T002 passes:
   - `DB_PATH`, anchored with `Path(__file__).resolve().parent.parent`.
   - `class DataUnavailableError(Exception)`.
   - `get_connection(db_path: Path = DB_PATH) -> sqlite3.Connection`, which opens `file:{path}?mode=ro` with `uri=True`.
