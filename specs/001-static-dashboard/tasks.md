@@ -33,7 +33,7 @@ description: "Task list for the Default Dashboard (v0-c)"
 
 **Purpose**: A tiny hand-made database so every expected number can be worked out by hand and CI runs without `olist.db` ([research.md](research.md) R12).
 
-- [ ] T001 Create `tests/conftest.py` with three pytest fixtures, using the **Fixture data** in the appendix at the end of this file:
+- [X] T001 Create `tests/conftest.py` with three pytest fixtures, using the **Fixture data** in the appendix at the end of this file:
   - `fixture_db_path`: writes a SQLite file in `tmp_path` with the four tables `orders`, `order_items`, `products` and `product_category_name_translation`. It uses the real column names from [data-model.md](data-model.md) Part 1, plus `freight_value` on `order_items`.
   - `empty_db_path`: the same four tables, but with no rows.
   - `missing_db_path`: a `tmp_path` path where no file exists.
