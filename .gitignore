@@ -225,3 +225,4 @@ data/*.db
 .vscode/
 # Claude Code personal settings (never commit)
 .claude/settings.local.json
+CLAUDE.local.md
